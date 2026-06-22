@@ -1,13 +1,14 @@
 import Board from "./Components/Board";
 import ToolBar from "./Components/ToolBar";
+import BoardProvider from "./store/BoardProvider.js";
 function App() {
 
   return (
-    <>
-      <h1 className="text-3xl font-bold text-red-500">Hello</h1>
+    <BoardProvider>
+   
        <Board />
        <ToolBar />
-    </>
+    </BoardProvider>
 
     
 
