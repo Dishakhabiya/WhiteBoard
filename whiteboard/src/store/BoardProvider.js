@@ -1,10 +1,10 @@
 import React from "react";
 import BoardContext from "./board-context";
-import rough from "roughjs/bin/rough"
+
 import {BOARD_ACTIONS, TOOL_ACTION_TYPE, TOOL_ITEMS}  from "../constants";
 import { useReducer } from "react";
 import { createRoughElement } from "../Components/utils/element";
-const gen = rough.generator();
+
 const boardReducer = (state,action) => {
     switch(action.type){
       case BOARD_ACTIONS.CHANGE_TOOL:
@@ -16,14 +16,15 @@ const boardReducer = (state,action) => {
       }
       case BOARD_ACTIONS.DRAW_DOWN:
         {
-        const {clientX,clientY} = action.payload;
+        const {clientX,clientY,stroke,fill,size} = action.payload;
         const newElement = createRoughElement
               (state.elements.length,
               clientX,
               clientY,
               clientX,
               clientY,
-             { type: state.activeToolItem});
+             { type: state.activeToolItem,
+              stroke,fill,size});
       
            const prevElements = state.elements;
         return {
@@ -36,14 +37,14 @@ const boardReducer = (state,action) => {
           {    const {clientX,clientY} = action.payload;
           const newElements = [...state.elements];
           const index = state.elements.length -1;
-          const {x1, y1}=newElements[index];
+          const {x1, y1, stroke, fill,size}=newElements[index];
             const newElement = createRoughElement
               (index,
               x1,
               y1,
               clientX,
               clientY,
-             { type: state.activeToolItem});
+             { type: state.activeToolItem,fill,stroke,size});
               newElements[index]=newElement;
           return {
             ...state,
@@ -76,11 +77,14 @@ const BoardProvider = ({children}) => {
         }})
       };
 
-      const boardMouseDownHandler = (event) => {
+      const boardMouseDownHandler = (event,toolboxState) => {
         const {clientX,clientY} = event;
       
         dispatchBoardAction({type:"DRAW_DOWN",payload:{
           clientX,clientY,
+          stroke:toolboxState[boardState.activeToolItem]?.stroke,
+          fill:toolboxState[boardState.activeToolItem]?.fill,
+          size:toolboxState[boardState.activeToolItem]?.size,
         }})
       };
         const boardMouseMoveHandler = (event) => {
