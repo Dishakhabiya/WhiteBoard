@@ -55,6 +55,9 @@ export const createRoughElement = (id,x1,y1,x2,y2,{ type,stroke,fill,size }) =>{
             const points = [[x1,y1],[x2,y2],[x3,y3],[x2,y2],[x4,y4]]
             element.roughEle =  gen.linearPath(points,options);
                return element;
+        case TOOL_ITEMS.TEXT:
+            element.text="";
+            return element;
         default:
             throw new Error("Type not recognised");
             
