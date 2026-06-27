@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import BoardContext from "./board-context";
 
 import {BOARD_ACTIONS, TOOL_ACTION_TYPE, TOOL_ITEMS}  from "../constants";
@@ -184,13 +184,12 @@ const BoardProvider = ({children}) => {
         }});
         return;
       };
-      const textAreaBlurHandler = (text,toolboxState) => {
+      const textAreaBlurHandler = (text) => {
          dispatchBoardAction({
                     type:BOARD_ACTIONS.CHANGE_TEXT,
                     payload:{
                         text,
-                        stroke:toolboxState[boardState.activeToolItem]?.stroke,
-                        size: toolboxState[boardState.activeToolItem]?.size,
+                       
                     }
                 });
 
@@ -221,12 +220,12 @@ const BoardProvider = ({children}) => {
         }})
       };
 
-      const boardUndoHandler = () => {
+      const boardUndoHandler = useCallback(() => {
           dispatchBoardAction({type:BOARD_ACTIONS.UNDO,})
-      };
-       const boardRedoHandler = () => {
+      },[]);
+       const boardRedoHandler = useCallback(() => {
           dispatchBoardAction({type:BOARD_ACTIONS.REDO,})
-      }
+      },[]);
       const boardContextValue ={
         activeToolItem: boardState.activeToolItem,
         elements: boardState.elements,
